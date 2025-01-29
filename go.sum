@@ -1,0 +1,6 @@
+github.com/mmcdole/gofeed v1.1.0 h1:YXnz6ffX5cBwPSGPCEMN0/GX0POFtvn9P7U57IlBA8M=
+github.com/mmcdole/gofeed v1.1.0/go.mod h1:hZZ3S0+T4GFXs4I0np9oWYN8zzC63pUAbXYBxqUtzG4=
+github.com/sirupsen/logrus v1.8.1 h1:vF5zP2e0dfQaT5mSrdjU2hhyP/NdUuLTg5OCoGi3Rb8=
+github.com/sirupsen/logrus v1.8.1/go.mod h1:y7X5+XGnRM8nv/bBq7Y5q01H9U9rlIDwKhzrB65Z+R8=
+golang.org/x/net v0.8.0 h1:v9U8ExR5cvxXZQMEwZZPyxO8UgFYUkskQ1TTzjXCNjo=
+golang.org/x/net v0.8.0/go.mod h1:nnfBvZw4SuMj0jVm1+0pTtWvUODpcrhVsa34/E8UuiA=
