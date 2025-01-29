@@ -15,7 +15,11 @@ def fetch_h1_reports():
     """Fetch latest reports from HackerOne"""
     response = requests.get(sources["HackerOne"])
     if response.status_code == 200:
-        return response.json().get("reports", [])
+        try:
+            return response.json().get("reports", [])
+        except json.JSONDecodeError:
+            print("Error: Received invalid JSON from HackerOne API")
+            return []
     return []
 
 def fetch_bugcrowd_programs():
