@@ -115,15 +115,7 @@ func TrackTrends() {
 		"https://medium.com/feed/tag/vulnerability",
 	}
 
-	readmeContent, err := ioutil.ReadFile("README.md")
-	if err != nil && !os.IsNotExist(err) {
-		fmt.Printf("Error reading README.md: %v\n", err)
-		return
-	}
-	readmeText := string(readmeContent)
-	currentDate := time.Now().In(time.UTC).Format("Mon, 02 Jan 2006")
-
-	entries := make(map[string]map[string]string)
+	entries := make([]map[string]string, 0)
 
 	for _, url := range urls {
 		rss, err := fetchRSSFeed(url)
@@ -134,37 +126,18 @@ func TrackTrends() {
 
 		feedName := extractFeedName(url)
 		for _, item := range rss.Channel.Items {
-			if _, found := entries[item.GUID]; !found {
-				entries[item.GUID] = map[string]string{
-					"title":   item.Title,
-					"guid":    item.GUID,
-					"pubDate": item.PubDate,
-					"feeds":   fmt.Sprintf("[%s](%s)", feedName, url),
-					"isNew":   "Yes",
-					"isToday": isToday(item.PubDate, currentDate),
-				}
-				if strings.Contains(readmeText, item.GUID) {
-					entries[item.GUID]["isNew"] = ""
-				}
-			} else {
-				existingFeeds := entries[item.GUID]["feeds"]
-				entries[item.GUID]["feeds"] = existingFeeds + fmt.Sprintf(", [%s](%s)", feedName, url)
+			entry := map[string]string{
+				"title":   item.Title,
+				"guid":    item.GUID,
+				"pubDate": item.PubDate,
+				"feeds":   fmt.Sprintf("[%s](%s)", feedName, url),
+				"isNew":   "Yes",
+				"isToday": isToday(item.PubDate, time.Now().Format("Mon, 02 Jan 2006")),
 			}
+			entries = append(entries, entry)
 		}
 		time.Sleep(2 * time.Second)
 	}
 
-	entryList := make([]map[string]string, 0, len(entries))
-	for _, entry := range entries {
-		entryList = append(entryList, entry)
-	}
-
-	sort.SliceStable(entryList, func(i, j int) bool {
-		if entryList[i]["isNew"] == entryList[j]["isNew"] {
-			return entryList[i]["isToday"] > entryList[j]["isToday"]
-		}
-		return entryList[i]["isNew"] > entryList[j]["isNew"]
-	})
-
-	WriteReport(entryList)
+	WriteReport(entries)
 }
